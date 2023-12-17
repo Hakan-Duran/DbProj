@@ -7,7 +7,7 @@ app = Flask(__name__)
 db_config = {
     'host': 'localhost',
     'user': 'root',
-    'password': 'MeRoot1234.+',
+    'password': '123456',
     'database': 'dbproj',
 }
 
@@ -45,6 +45,10 @@ def add_user():
         return f'User {username} added successfully!'
 
     return render_template('add_user.html')  # Create an HTML form to add users
+
+@app.route('/test')
+def test():
+    return render_template('test.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
