@@ -3,23 +3,44 @@
 {% block title %}SQL Query Results{% endblock %}
 
 {% block content %}
+<div class="content-container">
     <h2>SQL Query Results</h2>
-    <table border="1">
-        <thead>
-            <tr>
-                {% for column in columns %}
-                    <th>{{ column }}</th>
-                {% endfor %}
-            </tr>
-        </thead>
-        <tbody>
-            {% for row in results %}
+    <form action="/search" method="get">
+        <input type="text" name="country" placeholder="Search by country..." class="search-input">
+        <button type="submit" class="search-button">Search</button>
+    </form>
+    <div class="table-container">
+        <table>
+            <thead>
                 <tr>
-                    {% for value in row %}
-                        <td>{{ value }}</td>
+                    {% for column in columns %}
+                    <th>
+                        {% if column not in ['hdicode', 'region'] %}
+                            <a href="/{{ column }}/{{ 'asc' if sorted_column != column or sorted_order == 'desc' else 'desc' }}" class="header-link">
+                                <span class="header-title">
+                                    {{ column }}
+                                    {% if sorted_column == column %}
+                                        <span class="{{ 'ascending' if sorted_order == 'asc' else 'descending' }}"></span>
+                                    {% endif %}
+                                </span>
+                            </a>
+                        {% else %}
+                            <span class="header-title">{{ column }}</span>
+                        {% endif %}
+                    </th>
                     {% endfor %}
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for row in results %}
+                    <tr>
+                        {% for value in row %}
+                            <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}
