@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, send_file
 import mysql.connector
 import os
+import plotly.express as px
+import pandas as pd
 
 app = Flask(__name__)
 
@@ -8,7 +10,7 @@ app = Flask(__name__)
 db_config = {
     'host': 'localhost',
     'user': 'root',
-    'password': '123456',
+    'password': 'MeRoot1234.+',
     'database': 'dbproj',
 }
 
@@ -17,6 +19,46 @@ conn = mysql.connector.connect(**db_config)
 
 # Create a cursor object to interact with the database
 cursor = conn.cursor()
+
+def get_data_from_database(table, date):
+    if table == "co2_production":
+        cursor.execute(f'SELECT Country, co2_prod_{date} FROM {table}')
+        result = cursor.fetchall()
+        
+    if table == "gross_national_income_per_capital":
+        cursor.execute(f'SELECT Country, gnipc_{date} FROM {table}')
+        result = cursor.fetchall()
+        
+    if table == "human_development_index":
+        cursor.execute(f'SELECT Country, hdi_{date} FROM {table}')
+        result = cursor.fetchall()
+        
+    if table == "life_expectancy_by_birth":
+        cursor.execute(f'SELECT Country, le_{date} FROM {table}')
+        result = cursor.fetchall()
+        
+    else:
+        print("table is not exist")
+
+    return pd.DataFrame(result, columns=['Country', 'value'])
+
+
+@app.route('/world_map')
+def world_map():
+    table = request.args.get('table')
+    date = request.args.get('date')
+    df = get_data_from_database(table, date)
+
+    if df.empty:
+        return 'No data available.'
+
+    fig = px.choropleth(df, locations='Country', locationmode='country names', color='value', template='plotly', color_continuous_scale='Viridis')
+    return render_template('world_map.html', plot=fig.to_html(full_html=False))
+
+@app.route('/world')
+def world():
+    return render_template('world.html')
+
 
 @app.route('/project')
 def project():
