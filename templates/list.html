@@ -35,9 +35,11 @@
 <div class="content-container">
     <h2>SQL Query Results</h2>
     <form action="/search" method="get">
+        <input type="hidden" name="schema" value="{{ schema }}"> <!-- Add this line -->
         <input type="text" name="country" placeholder="Search by country..." class="search-input">
         <button type="submit" class="search-button">Search</button>
     </form>
+    
     <div class="table-container">
         <table>
             <thead>

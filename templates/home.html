@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="home-container">
+    <div class="team-section">
+        <h1>Project Name</h1>
+        <ul class="team-list">
+            <li>Name 1</li>
+            <li>Name 2</li>
+            <li>Name 3</li>
+            <li>Name 4</li>
+        </ul>
+    </div>
+    <div class="table-section">
+        <ul class="table-list">
+            <li><a href="/list/co2_production">co2_production</a></li>
+            <li><a href="/list/gross_national_income_per_capital">gross_national_income_per_capital</a></li>
+            <li><a href="/list/human_development_index">human_development_index</a></li>
+            <li><a href="/list/life_expectancy_by_birth">life_expectancy_by_birth</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

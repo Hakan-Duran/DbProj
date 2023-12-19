@@ -8,7 +8,7 @@ app = Flask(__name__)
 db_config = {
     'host': 'localhost',
     'user': 'root',
-    'password': 'MeRoot1234.+',
+    'password': '123456',
     'database': 'dbproj',
 }
 
@@ -51,8 +51,12 @@ def list(schema=None, column=None, order=None):
     return render_template('list.html', schema=schema , columns=columns, results=results , sorted_column=column, sorted_order=order, next_order=next_order)
 
 @app.route('/')
-@app.route('/<column>/<order>')
-def index(column=None, order=None):
+def home():
+    return render_template('home.html')
+
+@app.route('/tables')
+@app.route('/tables/<column>/<order>')
+def tables(column=None, order=None):
     query = "SELECT * FROM co2_production"
     next_order = 'asc'
 
@@ -64,20 +68,22 @@ def index(column=None, order=None):
     results = cursor.fetchall()
     columns = [i[0] for i in cursor.description]
 
-    return render_template('index.html', columns=columns, results=results, sorted_column=column, sorted_order=order, next_order=next_order)
+    return render_template('tables.html', columns=columns, results=results, sorted_column=column, sorted_order=order, next_order=next_order)
+
 
 @app.route('/search')
 def search():
     country = request.args.get('country')
+    schema = request.args.get('schema', 'co2_production') # Default to 'co2_production'
 
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor()
 
     if country:
-        query = "SELECT * FROM co2_production WHERE country LIKE %s"
+        query = f"SELECT * FROM `{schema}` WHERE country LIKE %s"
         cursor.execute(query, (f"%{country}%",))
     else:
-        query = "SELECT * FROM co2_production"
+        query = f"SELECT * FROM `{schema}`"
         cursor.execute(query)
 
     results = cursor.fetchall()
@@ -86,7 +92,7 @@ def search():
     cursor.close()
     conn.close()
 
-    return render_template('index.html', columns=columns, results=results)
+    return render_template('index.html', columns=columns, results=results, schema=schema)
 
 if __name__ == '__main__':
     app.run(debug=True)
