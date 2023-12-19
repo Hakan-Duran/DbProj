@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_file
 import mysql.connector
+import os
 
 app = Flask(__name__)
 
@@ -17,6 +18,13 @@ conn = mysql.connector.connect(**db_config)
 # Create a cursor object to interact with the database
 cursor = conn.cursor()
 
+@app.route('/project')
+def project():
+    # Assuming the PDF file is in the 'docs' directory relative to the script
+    pdf_directory = os.path.join(os.path.dirname(__file__), 'docs')
+    pdf_path = os.path.join(pdf_directory, 'Project.pdf')
+    return send_file(pdf_path, as_attachment=False)
+
 @app.route('/list')
 @app.route('/list/<schema>')
 @app.route('/list/<schema>/<column>/<order>')
@@ -29,8 +37,6 @@ def list(schema=None, column=None, order=None):
     
     if schema:
         query += f"`{schema}`"
-        
-    print(query)
         
     if column and order:
         column = column.strip()
@@ -81,10 +87,6 @@ def search():
     conn.close()
 
     return render_template('index.html', columns=columns, results=results)
-
-@app.route('/test')
-def test():
-    return render_template('test.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
