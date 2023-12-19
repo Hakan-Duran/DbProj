@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+
+{% block title %}SQL Table List{% endblock %}
+
+{% block content %}
+{% if schema == None %}
+
+<label for="selectOption">Select an option:</label>
+  <select id="selectOption" onchange="redirectToLink()">
+    <option value="" selected disabled>Select an option</option>
+    <option value="/list/co2_production">co2_production</option>
+    <option value="/list/gross_national_income_per_capital">gross_national_income_per_capital</option>
+    <option value="/list/human_development_index">human_development_index</option>
+    <option value="/list/life_expectancy_by_birth">life_expectancy_by_birth</option>
+  </select>
+
+  <script>
+    function redirectToLink() {
+      var select = document.getElementById("selectOption");
+      var selectedValue = select.options[select.selectedIndex].value;
+
+      // Check if a valid option is selected
+      if (selectedValue) {
+        window.location.href = selectedValue;
+      }
+    }
+  </script>
+
+{% else %}
+
+<div class="content-container">
+    <h2>SQL Query Results</h2>
+    <form action="/search" method="get">
+        <input type="text" name="country" placeholder="Search by country..." class="search-input">
+        <button type="submit" class="search-button">Search</button>
+    </form>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    {% for column in columns %}
+                    <th>
+                        {% if column not in ['hdicode', 'region'] %}
+                            <a href="/list/{{ schema }}/{{ column }}/{{ 'asc' if sorted_column != column or sorted_order == 'desc' else 'desc' }}" class="header-link">
+                                <span class="header-title">
+                                    {{ column }}
+                                    {% if sorted_column == column %}
+                                        <span class="{{ 'ascending' if sorted_order == 'asc' else 'descending' }}"></span>
+                                    {% endif %}
+                                </span>
+                            </a>
+                        {% else %}
+                            <span class="header-title">{{ column }}</span>
+                        {% endif %}
+                    </th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in results %}
+                    <tr>
+                        {% for value in row %}
+                            <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endif %}
+
+{% endblock %}

@@ -7,7 +7,7 @@ app = Flask(__name__)
 db_config = {
     'host': 'localhost',
     'user': 'root',
-    'password': '123456',
+    'password': 'MeRoot1234.+',
     'database': 'dbproj',
 }
 
@@ -16,6 +16,33 @@ conn = mysql.connector.connect(**db_config)
 
 # Create a cursor object to interact with the database
 cursor = conn.cursor()
+
+@app.route('/list')
+@app.route('/list/<schema>')
+@app.route('/list/<schema>/<column>/<order>')
+def list(schema=None, column=None, order=None):
+    
+    next_order = 'asc'
+    query = "SELECT * FROM "
+    columns = None
+    results = None
+    
+    if schema:
+        query += f"`{schema}`"
+        
+    print(query)
+        
+    if column and order:
+        column = column.strip()
+        query += f" ORDER BY `{column}` {'ASC' if order == 'asc' else 'DESC'}"
+        next_order = 'desc' if order == 'asc' else 'asc'
+    
+    if schema:
+        cursor.execute(query)
+        results = cursor.fetchall()
+        columns = [i[0] for i in cursor.description]
+
+    return render_template('list.html', schema=schema , columns=columns, results=results , sorted_column=column, sorted_order=order, next_order=next_order)
 
 @app.route('/')
 @app.route('/<column>/<order>')
@@ -54,22 +81,6 @@ def search():
     conn.close()
 
     return render_template('index.html', columns=columns, results=results)
-
-
-@app.route('/add_user', methods=['GET', 'POST'])
-def add_user():
-    if request.method == 'POST':
-        username = request.form['username']
-        email = request.form['email']
-
-        # Insert user into the database
-        insert_query = "INSERT INTO users (username, email) VALUES (%s, %s)"
-        cursor.execute(insert_query, (username, email))
-        conn.commit()
-
-        return f'User {username} added successfully!'
-
-    return render_template('add_user.html')  # Create an HTML form to add users
 
 @app.route('/test')
 def test():
