@@ -54,7 +54,7 @@ def insert(table, request):
         """
         return query
 
-    if table == "gross_national_income_per_capita":
+    if table == "gross_national_income_per_capital":
         ISO3 = request.form['ISO3']
         Country = request.form['Country']
         hdicode = request.form['hdicode']
@@ -93,7 +93,7 @@ def insert(table, request):
         gnipc_2020 = request.form['gnipc_2020']
         gnipc_2021 = request.form['gnipc_2021']
         
-        query = f"""INSERT INTO gross_national_income_per_capita ( 
+        query = f"""INSERT INTO gross_national_income_per_capital ( 
             ISO3, Country, hdicode, region, hdi_rank_2021, gnipc_1990, gnipc_1991, gnipc_1992, gnipc_1993, gnipc_1994, gnipc_1995, gnipc_1996, gnipc_1997, 
             gnipc_1998, gnipc_1999, gnipc_2000, gnipc_2001, gnipc_2002, gnipc_2003, gnipc_2004, gnipc_2005, gnipc_2006, gnipc_2007, gnipc_2008, gnipc_2009,
             gnipc_2010, gnipc_2011, gnipc_2012, gnipc_2013, gnipc_2014, gnipc_2015, gnipc_2016, gnipc_2017, gnipc_2018, gnipc_2019, gnipc_2020, gnipc_2021

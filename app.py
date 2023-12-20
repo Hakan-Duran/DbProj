@@ -5,6 +5,7 @@ import plotly.express as px
 import pandas as pd
 from insert import insert
 from delete import delete
+from update import update
 
 app = Flask(__name__)
 
@@ -102,8 +103,16 @@ def insertf(table=None):
 
 
 @app.route('/edit/<table>/update', methods=['GET', 'POST'])
-def updatef():
-    pass
+def updatef(table=None):
+    post = None
+    if request.method == 'GET':
+        return render_template('update.html', table=table, post=post)
+    if request.method == 'POST':
+        post = 1
+        query = update(table, request)
+        print(query)
+        cursor.execute(query)
+        return render_template('update.html', table=table, post=post)
 
 @app.route('/edit/<table>/delete', methods=['GET', 'POST'])
 def deletef(table=None):
