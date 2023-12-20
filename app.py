@@ -1,8 +1,10 @@
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request, send_file, redirect
 import mysql.connector
 import os
 import plotly.express as px
 import pandas as pd
+from insert import insert
+from delete import delete
 
 app = Flask(__name__)
 
@@ -66,6 +68,54 @@ def project():
     pdf_directory = os.path.join(os.path.dirname(__file__), 'docs')
     pdf_path = os.path.join(pdf_directory, 'Project.pdf')
     return send_file(pdf_path, as_attachment=False)
+
+@app.route('/edit', methods=['GET', 'POST'])
+def edit(table=None):
+    if request.method == 'GET':
+        return render_template('edit.html', table=table)
+    if request.method == 'POST':
+        table = request.form['table']
+        cud = request.form['cud']
+        url = f'/edit/{table}/{cud}'
+        return redirect(url)
+
+@app.route('/edit/<table>', methods=['GET', 'POST'])
+def edittable(table=None):
+    if request.method == 'GET':
+        return render_template('edit.html', table=table)
+    if request.method == 'POST':
+        cud = request.form['cud']
+    url = f'/edit/{table}/{cud}'
+    return redirect(url)
+
+@app.route('/edit/<table>/insert', methods=['GET', 'POST'])
+def insertf(table=None):
+    post = None
+    if request.method == 'GET':
+        return render_template('insert.html', table=table, post=post)
+    if request.method == 'POST':
+        post = 1
+        query = insert(table, request)
+        print(query)
+        cursor.execute(query)
+        return render_template('insert.html', table=table, post=post)
+
+
+@app.route('/edit/<table>/update', methods=['GET', 'POST'])
+def updatef():
+    pass
+
+@app.route('/edit/<table>/delete', methods=['GET', 'POST'])
+def deletef(table=None):
+    post = None
+    if request.method == 'GET':
+        return render_template('delete.html', table=table, post=post)
+    if request.method == 'POST':
+        post = 1
+        query = delete(table, request)
+        print(query)
+        cursor.execute(query)
+        return render_template('delete.html', table=table, post=post)
 
 @app.route('/list')
 @app.route('/list/<schema>')

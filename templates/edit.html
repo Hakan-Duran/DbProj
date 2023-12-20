@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block title %}SQL Edit (CUD) {% endblock %}
+
+{% block content %}
+<h1> SQL CUD - Insert, Update, Delete Operations </h1> 
+
+{% if table == None %}
+Please select a table and an operation:
+<form action="/edit" method="post">
+    <label for="table">Table:</label>
+    <select id="table" name="table">
+        <option value="" selected disabled>Select an option</option>
+        <option value="co2_production">co2_production</option>
+        <option value="gross_national_income_per_capital">gross_national_income_per_capital</option>
+        <option value="human_development_index">human_development_index</option>
+        <option value="life_expectancy_by_birth">life_expectancy_by_birth</option>
+    </select>
+    <label for="cud">Operation:</label>
+    <select id="cud" name="cud">
+        <option value="" selected disabled>Select an option</option>
+        <option value="insert">insert</option>
+        <option value="update">update</option>
+        <option value="delete">delete</option>
+    </select>
+    <input type="submit" value="Submit">
+</form>
+
+{% else %}
+Please select  an operation:
+<form action="/edit/{{ table }}" method="post">
+    <label for="cud">Operation:</label>
+    <select id="cud" name="cud">
+        <option value="" selected disabled>Select an option</option>
+        <option value="insert">insert</option>
+        <option value="update">update</option>
+        <option value="delete">delete</option>
+    </select>
+    <input type="submit" value="Submit">
+</form>
+
+{% endif %}
+
+{% endblock %}

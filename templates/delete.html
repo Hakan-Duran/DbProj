@@ -1,0 +1,209 @@
+{% extends "layout.html" %}
+
+{% block title %} Delete on {{table}} {% endblock %}
+
+{% block content %}
+<h1> Operation: Delete on {{table}} </h1> 
+
+{% if post == None %}
+
+    Deleted records should have:
+
+    {% if table == "co2_production" %}
+        <form action="/edit/co2_production/delete" method="post">
+            <label for="column">Table:</label>
+            <select id="column" name="column">
+                <option value="" selected disabled>Select an option</option>
+                <option value="ISO3">ISO3</option>
+                <option value="Country">Country</option>
+                <option value="hdicode">hdicode</option>
+                <option value="region">region</option>
+                <option value="hdi_rank_2021">hdi_rank_2021</option>
+                <option value="co2_prod_1990">co2_prod_1990</option>
+                <option value="co2_prod_1991">co2_prod_1991</option>
+                <option value="co2_prod_1992">co2_prod_1992</option>
+                <option value="co2_prod_1993">co2_prod_1993</option>
+                <option value="co2_prod_1994">co2_prod_1994</option>
+                <option value="co2_prod_1995">co2_prod_1995</option>
+                <option value="co2_prod_1996">co2_prod_1996</option>
+                <option value="co2_prod_1997">co2_prod_1997</option>
+                <option value="co2_prod_1998">co2_prod_1998</option>
+                <option value="co2_prod_1999">co2_prod_1999</option>
+                <option value="co2_prod_2000">co2_prod_2000</option>
+                <option value="co2_prod_2001">co2_prod_2001</option>
+                <option value="co2_prod_2002">co2_prod_2002</option>
+                <option value="co2_prod_2003">co2_prod_2003</option>
+                <option value="co2_prod_2004">co2_prod_2004</option>
+                <option value="co2_prod_2005">co2_prod_2005</option>
+                <option value="co2_prod_2006">co2_prod_2006</option>
+                <option value="co2_prod_2007">co2_prod_2007</option>
+                <option value="co2_prod_2008">co2_prod_2008</option>
+                <option value="co2_prod_2009">co2_prod_2009</option>
+                <option value="co2_prod_2010">co2_prod_2010</option>
+                <option value="co2_prod_2011">co2_prod_2011</option>
+                <option value="co2_prod_2012">co2_prod_2012</option>
+                <option value="co2_prod_2013">co2_prod_2013</option>
+                <option value="co2_prod_2014">co2_prod_2014</option>
+                <option value="co2_prod_2015">co2_prod_2015</option>
+                <option value="co2_prod_2016">co2_prod_2016</option>
+                <option value="co2_prod_2017">co2_prod_2017</option>
+                <option value="co2_prod_2018">co2_prod_2018</option>
+                <option value="co2_prod_2019">co2_prod_2019</option>
+                <option value="co2_prod_2020">co2_prod_2020</option>
+                <option value="co2_prod_2021">co2_prod_2021</option>
+            </select>
+            <label for="txtvalue">is (is equal to)</label><br>
+            <input type="text" id="txtvalue" name="txtvalue"><br>
+        </form>
+    {% elif table == "gross_national_income_per_capita" %}
+        <form action="/edit/gross_national_income_per_capita/delete" method="post">
+            <label for="column">Table:</label>
+            <select id="column" name="column">
+                <option value="" selected disabled>Select an option</option>
+                <option value="ISO3">ISO3</option>
+                <option value="Country">Country</option>
+                <option value="hdicode">hdicode</option>
+                <option value="region">region</option>
+                <option value="hdi_rank_2021">hdi_rank_2021</option>
+                <option value="gnipc_1990">gnipc_1990</option>
+                <option value="gnipc_1991">gnipc_1991</option>
+                <option value="gnipc_1992">gnipc_1992</option>
+                <option value="gnipc_1993">gnipc_1993</option>
+                <option value="gnipc_1994">gnipc_1994</option>
+                <option value="gnipc_1995">gnipc_1995</option>
+                <option value="gnipc_1996">gnipc_1996</option>
+                <option value="gnipc_1997">gnipc_1997</option>
+                <option value="gnipc_1998">gnipc_1998</option>
+                <option value="gnipc_1999">gnipc_1999</option>
+                <option value="gnipc_2000">gnipc_2000</option>
+                <option value="gnipc_2001">gnipc_2001</option>
+                <option value="gnipc_2002">gnipc_2002</option>
+                <option value="gnipc_2003">gnipc_2003</option>
+                <option value="gnipc_2004">gnipc_2004</option>
+                <option value="gnipc_2005">gnipc_2005</option>
+                <option value="gnipc_2006">gnipc_2006</option>
+                <option value="gnipc_2007">gnipc_2007</option>
+                <option value="gnipc_2008">gnipc_2008</option>
+                <option value="gnipc_2009">gnipc_2009</option>
+                <option value="gnipc_2010">gnipc_2010</option>
+                <option value="gnipc_2011">gnipc_2011</option>
+                <option value="gnipc_2012">gnipc_2012</option>
+                <option value="gnipc_2013">gnipc_2013</option>
+                <option value="gnipc_2014">gnipc_2014</option>
+                <option value="gnipc_2015">gnipc_2015</option>
+                <option value="gnipc_2016">gnipc_2016</option>
+                <option value="gnipc_2017">gnipc_2017</option>
+                <option value="gnipc_2018">gnipc_2018</option>
+                <option value="gnipc_2019">gnipc_2019</option>
+                <option value="gnipc_2020">gnipc_2020</option>
+                <option value="gnipc_2021">gnipc_2021</option>
+            </select>
+            <label for="txtvalue">is (is equal to)</label><br>
+            <input type="text" id="txtvalue" name="txtvalue"><br>
+        </form>
+    {% elif table == "human_development_index" %}
+        <form action="/edit/human_development_index/delete" method="post">
+            <label for="column">Table:</label>
+            <select id="column" name="column">
+                <option value="" selected disabled>Select an option</option>
+                <option value="ISO3">ISO3</option>
+                <option value="Country">Country</option>
+                <option value="hdicode">hdicode</option>
+                <option value="region">region</option>
+                <option value="hdi_rank_2021">hdi_rank_2021</option>
+                <option value="hdi_1990">hdi_1990</option>
+                <option value="hdi_1991">hdi_1991</option>
+                <option value="hdi_1992">hdi_1992</option>
+                <option value="hdi_1993">hdi_1993</option>
+                <option value="hdi_1994">hdi_1994</option>
+                <option value="hdi_1995">hdi_1995</option>
+                <option value="hdi_1996">hdi_1996</option>
+                <option value="hdi_1997">hdi_1997</option>
+                <option value="hdi_1998">hdi_1998</option>
+                <option value="hdi_1999">hdi_1999</option>
+                <option value="hdi_2000">hdi_2000</option>
+                <option value="hdi_2001">hdi_2001</option>
+                <option value="hdi_2002">hdi_2002</option>
+                <option value="hdi_2003">hdi_2003</option>
+                <option value="hdi_2004">hdi_2004</option>
+                <option value="hdi_2005">hdi_2005</option>
+                <option value="hdi_2006">hdi_2006</option>
+                <option value="hdi_2007">hdi_2007</option>
+                <option value="hdi_2008">hdi_2008</option>
+                <option value="hdi_2009">hdi_2009</option>
+                <option value="hdi_2010">hdi_2010</option>
+                <option value="hdi_2011">hdi_2011</option>
+                <option value="hdi_2012">hdi_2012</option>
+                <option value="hdi_2013">hdi_2013</option>
+                <option value="hdi_2014">hdi_2014</option>
+                <option value="hdi_2015">hdi_2015</option>
+                <option value="hdi_2016">hdi_2016</option>
+                <option value="hdi_2017">hdi_2017</option>
+                <option value="hdi_2018">hdi_2018</option>
+                <option value="hdi_2019">hdi_2019</option>
+                <option value="hdi_2020">hdi_2020</option>
+                <option value="hdi_2021">hdi_2021</option>
+            </select>
+            <label for="txtvalue">is (is equal to)</label><br>
+            <input type="text" id="txtvalue" name="txtvalue"><br>
+        </form>
+
+    {% elif table == "life_expectancy_by_birth" %}
+        <form action="/edit/life_expectancy_by_birth/delete" method="post">
+            <label for="column">Table:</label>
+            <select id="column" name="column">
+                <option value="" selected disabled>Select an option</option>
+                <option value="ISO3">ISO3</option>
+                <option value="Country">Country</option>
+                <option value="hdicode">hdicode</option>
+                <option value="region">region</option>
+                <option value="hdi_rank_2021">hdi_rank_2021</option>
+                <option value="le_1990">le_1990</option>
+                <option value="le_1991">le_1991</option>
+                <option value="le_1992">le_1992</option>
+                <option value="le_1993">le_1993</option>
+                <option value="le_1994">le_1994</option>
+                <option value="le_1995">le_1995</option>
+                <option value="le_1996">le_1996</option>
+                <option value="le_1997">le_1997</option>
+                <option value="le_1998">le_1998</option>
+                <option value="le_1999">le_1999</option>
+                <option value="le_2000">le_2000</option>
+                <option value="le_2001">le_2001</option>
+                <option value="le_2002">le_2002</option>
+                <option value="le_2003">le_2003</option>
+                <option value="le_2004">le_2004</option>
+                <option value="le_2005">le_2005</option>
+                <option value="le_2006">le_2006</option>
+                <option value="le_2007">le_2007</option>
+                <option value="le_2008">le_2008</option>
+                <option value="le_2009">le_2009</option>
+                <option value="le_2010">le_2010</option>
+                <option value="le_2011">le_2011</option>
+                <option value="le_2012">le_2012</option>
+                <option value="le_2013">le_2013</option>
+                <option value="le_2014">le_2014</option>
+                <option value="le_2015">le_2015</option>
+                <option value="le_2016">le_2016</option>
+                <option value="le_2017">le_2017</option>
+                <option value="le_2018">le_2018</option>
+                <option value="le_2019">le_2019</option>
+                <option value="le_2020">le_2020</option>
+                <option value="le_2021">le_2021</option>                
+            </select>
+            <label for="txtvalue">is (is equal to)</label><br>
+            <input type="text" id="txtvalue" name="txtvalue"><br>
+        </form>
+
+    {% else %}
+    <h1> ERROR: TABLE IS NOT EXIST. SELECTED TABLE IS: {{ table }} </h1>
+    {% endif %}
+
+
+{% else %}
+
+<h1> SUCCESSFUL OPERATION ON {{table}} </h1>
+
+{% endif %}
+
+{% endblock %}
