@@ -56,6 +56,7 @@ def world_map():
         return 'No data available.'
 
     fig = px.choropleth(df, locations='Country', locationmode='country names', color='value', template='plotly', color_continuous_scale='Viridis')
+    fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
     return render_template('world_map.html', plot=fig.to_html(full_html=False))
 
 @app.route('/world')
