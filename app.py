@@ -14,7 +14,7 @@ db_config = {
     'host': 'localhost',
     'user': 'root',
     'password': 'MeRoot1234.+',
-    'database': 'dbproj',
+    'database': 'archive',
 }
 
 # Create a connection to MySQL
@@ -211,7 +211,7 @@ def list(schema=None, column=None, order=None):
 
 @app.route('/')
 def home():
-    execute_sql_file('queries.sql', db_config)
+    # execute_sql_file('queries.sql', db_config)
     return render_template('home.html')
 
 @app.route('/tables')
