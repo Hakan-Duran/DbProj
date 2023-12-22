@@ -23,6 +23,35 @@ conn = mysql.connector.connect(**db_config)
 # Create a cursor object to interact with the database
 cursor = conn.cursor()
 
+import mysql.connector
+
+def execute_sql_file(file_path, db_config):
+    try:
+        # Connect to the database
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor()
+
+        # Read SQL queries from the file
+        with open(file_path, 'r') as sql_file:
+            queries = sql_file.read()
+
+        # Execute the queries
+        cursor.execute(queries, multi=True)
+
+        # Commit the changes
+        conn.commit()
+
+        print(f"SQL file {file_path} executed successfully.")
+
+    except mysql.connector.Error as err:
+        print(f"MySQL Error: {err}")
+
+    finally:
+        # Close the connection
+        if conn.is_connected():
+            cursor.close()
+            conn.close()
+
 def get_data_from_database(table, date):
     if table == "co2_production":
         cursor.execute(f'SELECT Country, co2_prod_{date} FROM {table}')
@@ -48,9 +77,14 @@ def get_data_from_database(table, date):
 
 @app.route('/world_map')
 def world_map():
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor()
     table = request.args.get('table')
     date = request.args.get('date')
     df = get_data_from_database(table, date)
+    cursor.close()
+    conn.close()
+    
 
     if df.empty:
         return 'No data available.'
@@ -96,10 +130,15 @@ def insertf(table=None):
     if request.method == 'GET':
         return render_template('insert.html', table=table, post=post)
     if request.method == 'POST':
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor()
         post = 1
         query = insert(table, request)
         print(query)
         cursor.execute(query)
+        conn.commit()
+        cursor.close()
+        conn.close()
         return render_template('insert.html', table=table, post=post)
 
 
@@ -109,28 +148,43 @@ def updatef(table=None):
     if request.method == 'GET':
         return render_template('update.html', table=table, post=post)
     if request.method == 'POST':
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor()
         post = 1
         query = update(table, request)
         print(query)
         cursor.execute(query)
+        conn.commit()
+        cursor.close()
+        conn.close()
         return render_template('update.html', table=table, post=post)
 
 @app.route('/edit/<table>/delete', methods=['GET', 'POST'])
 def deletef(table=None):
+    
+    
     post = None
     if request.method == 'GET':
         return render_template('delete.html', table=table, post=post)
     if request.method == 'POST':
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor()
         post = 1
         query = delete(table, request)
         print(query)
         cursor.execute(query)
+        conn.commit()
+        cursor.close()
+        conn.close()
         return render_template('delete.html', table=table, post=post)
 
 @app.route('/list')
 @app.route('/list/<schema>')
 @app.route('/list/<schema>/<column>/<order>')
 def list(schema=None, column=None, order=None):
+    
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor()
     
     next_order = 'asc'
     query = "SELECT * FROM "
@@ -149,16 +203,24 @@ def list(schema=None, column=None, order=None):
         cursor.execute(query)
         results = cursor.fetchall()
         columns = [i[0] for i in cursor.description]
+    
+    cursor.close()
+    conn.close()
 
     return render_template('list.html', schema=schema , columns=columns, results=results , sorted_column=column, sorted_order=order, next_order=next_order)
 
 @app.route('/')
 def home():
+    execute_sql_file('queries.sql', db_config)
     return render_template('home.html')
 
 @app.route('/tables')
 @app.route('/tables/<column>/<order>')
 def tables(column=None, order=None):
+    
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor()
+    
     query = "SELECT * FROM co2_production"
     next_order = 'asc'
 
@@ -169,6 +231,9 @@ def tables(column=None, order=None):
     cursor.execute(query)
     results = cursor.fetchall()
     columns = [i[0] for i in cursor.description]
+    
+    cursor.close()
+    conn.close()
 
     return render_template('tables.html', columns=columns, results=results, sorted_column=column, sorted_order=order, next_order=next_order)
 
