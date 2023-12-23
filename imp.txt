@@ -1,6 +1,0 @@
-.\venv\Scripts\activate
-hata veriyorsaa komut -> Set-ExecutionPolicy Unrestricted -Scope Process
-pip install plotly pandas
-
-
-
