@@ -69,6 +69,12 @@ th {
     text-align: center;
 }
 
+.search-form {
+    display: inline-block;
+    margin-bottom: 15px;
+    margin-right: 10px;
+}
+
 .search-input {
     padding: 10px;
     border: 1px solid #ddd;
@@ -91,6 +97,65 @@ th {
 }
 
 .search-input, .search-button {
+    vertical-align: middle;
+}
+
+.crud-container {
+    display: inline-block;
+    margin-bottom: 15px;
+    margin-right: 10px;
+}
+
+.insert-form, .delete-form, .update-form {
+    display: inline-block;
+}
+
+.insert-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #b1d910;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.insert-button:hover {
+    background-color: #e8dc01;
+}
+
+.delete-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #752323;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+    background-color: #e80101;
+}
+
+.update-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #101dd9;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.update-button:hover {
+    background-color: #109eea;
+}
+
+.insert-button, .delete-button, .update-button {
     vertical-align: middle;
 }
 

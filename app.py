@@ -23,11 +23,8 @@ conn = mysql.connector.connect(**db_config)
 # Create a cursor object to interact with the database
 cursor = conn.cursor()
 
-import mysql.connector
-
 def execute_sql_file(file_path, db_config):
     try:
-        # Connect to the database
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor()
 
@@ -35,10 +32,8 @@ def execute_sql_file(file_path, db_config):
         with open(file_path, 'r') as sql_file:
             queries = sql_file.read()
 
-        # Execute the queries
-        cursor.execute(queries, multi=True)
 
-        # Commit the changes
+        cursor.execute(queries, multi=True)
         conn.commit()
 
         print(f"SQL file {file_path} executed successfully.")
@@ -47,13 +42,13 @@ def execute_sql_file(file_path, db_config):
         print(f"MySQL Error: {err}")
 
     finally:
-        # Close the connection
         if conn.is_connected():
             cursor.close()
             conn.close()
 
 def get_data_from_database(table, date):
     if table == "co2_production":
+        # Fetch necessary data for map creation
         cursor.execute(f'SELECT Country, co2_prod_{date} FROM {table}')
         result = cursor.fetchall()
         
@@ -89,6 +84,7 @@ def world_map():
     if df.empty:
         return 'No data available.'
 
+    # Adjust necessary values for map creation
     fig = px.choropleth(df, locations='Country', locationmode='country names', color='value', template='plotly', color_continuous_scale='Viridis')
     fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
     return render_template('world_map.html', plot=fig.to_html(full_html=False))
@@ -100,7 +96,6 @@ def world():
 
 @app.route('/project')
 def project():
-    # Assuming the PDF file is in the 'docs' directory relative to the script
     pdf_directory = os.path.join(os.path.dirname(__file__), 'docs')
     pdf_path = os.path.join(pdf_directory, 'Project.pdf')
     return send_file(pdf_path, as_attachment=False)
@@ -126,21 +121,20 @@ def edittable(table=None):
 
 @app.route('/edit/<table>/insert', methods=['GET', 'POST'])
 def insertf(table=None):
-    post = None
+    post = None # This variable is for insert.html to show related content
     if request.method == 'GET':
         return render_template('insert.html', table=table, post=post)
     if request.method == 'POST':
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor()
         post = 1
-        query = insert(table, request)
+        query = insert(table, request) # SQL query is getting from insert.py
         print(query)
         cursor.execute(query)
         conn.commit()
         cursor.close()
         conn.close()
         return render_template('insert.html', table=table, post=post)
-
 
 @app.route('/edit/<table>/update', methods=['GET', 'POST'])
 def updatef(table=None):
@@ -151,7 +145,7 @@ def updatef(table=None):
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor()
         post = 1
-        query = update(table, request)
+        query = update(table, request) # SQL query is getting from update.py
         print(query)
         cursor.execute(query)
         conn.commit()
@@ -161,8 +155,6 @@ def updatef(table=None):
 
 @app.route('/edit/<table>/delete', methods=['GET', 'POST'])
 def deletef(table=None):
-    
-    
     post = None
     if request.method == 'GET':
         return render_template('delete.html', table=table, post=post)
@@ -170,13 +162,53 @@ def deletef(table=None):
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor()
         post = 1
-        query = delete(table, request)
+        query = delete(table, request) # SQL query is getting from delete.py
         print(query)
         cursor.execute(query)
         conn.commit()
         cursor.close()
         conn.close()
         return render_template('delete.html', table=table, post=post)
+    
+@app.route('/list/<schema>/search', methods=['GET', 'POST'])
+@app.route('/list/<schema>/search/<country>')
+@app.route('/list/<schema>/search/<country>/<column>/<order>')
+def search(schema=None, column=None, order=None, country=None):
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor()
+    
+    next_order = 'asc'
+    query = "SELECT * FROM "
+    columns = None
+    results = None
+    
+    if request.method == 'POST':
+        country = request.form.get('country')
+        url = f'/list/{schema}/search/{country}'
+        return redirect(url)
+    
+    if schema:
+        query += f"`{schema}`"
+        
+    if country:
+        query += f" WHERE country LIKE '%{country}%'"
+        print(query)
+        
+    if column and order:
+        column = column.strip()
+        query += f" ORDER BY `{column}` {'ASC' if order == 'asc' else 'DESC'}"
+        next_order = 'desc' if order == 'asc' else 'asc'
+    
+    if schema:
+        cursor.execute(query)
+        results = cursor.fetchall()
+        columns = [i[0] for i in cursor.description]
+    
+    cursor.close()
+    conn.close()
+
+    return render_template('list.html', schema=schema , columns=columns, results=results , sorted_column=column, sorted_order=order, next_order=next_order, country=country)
+
 
 @app.route('/list')
 @app.route('/list/<schema>')
@@ -213,53 +245,6 @@ def list(schema=None, column=None, order=None):
 def home():
     # execute_sql_file('queries.sql', db_config)
     return render_template('home.html')
-
-@app.route('/tables')
-@app.route('/tables/<column>/<order>')
-def tables(column=None, order=None):
-    
-    conn = mysql.connector.connect(**db_config)
-    cursor = conn.cursor()
-    
-    query = "SELECT * FROM co2_production"
-    next_order = 'asc'
-
-    if column and order:
-        query += f" ORDER BY `{column}` {'ASC' if order == 'asc' else 'DESC'}"
-        next_order = 'desc' if order == 'asc' else 'asc'
-
-    cursor.execute(query)
-    results = cursor.fetchall()
-    columns = [i[0] for i in cursor.description]
-    
-    cursor.close()
-    conn.close()
-
-    return render_template('tables.html', columns=columns, results=results, sorted_column=column, sorted_order=order, next_order=next_order)
-
-
-@app.route('/search')
-def search():
-    country = request.args.get('country')
-    schema = request.args.get('schema', 'co2_production') # Default to 'co2_production'
-
-    conn = mysql.connector.connect(**db_config)
-    cursor = conn.cursor()
-
-    if country:
-        query = f"SELECT * FROM `{schema}` WHERE country LIKE %s"
-        cursor.execute(query, (f"%{country}%",))
-    else:
-        query = f"SELECT * FROM `{schema}`"
-        cursor.execute(query)
-
-    results = cursor.fetchall()
-    columns = [i[0] for i in cursor.description]
-
-    cursor.close()
-    conn.close()
-
-    return render_template('index.html', columns=columns, results=results, schema=schema)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -34,12 +34,25 @@
 
 <div class="content-container">
     <h2>SQL Query Results</h2>
-    <form action="/search" method="get">
-        <input type="hidden" name="schema" value="{{ schema }}"> <!-- Add this line -->
-        <input type="text" name="country" placeholder="Search by country..." class="search-input">
-        <button type="submit" class="search-button">Search</button>
-    </form>
+    <div class="search-form">
+        <form action="/list/{{schema}}/search" method="POST">
+            <input type="text" name="country" placeholder="Search by country..." class="search-input">
+            <button type="submit" class="search-button">Search</button>
+        </form>
+    </div>
     
+<div class="crud-container">
+    <form action="/edit/{{schema}}/insert" class="insert-form">
+        <button type="submit" class="insert-button">Insert</button>
+    </form>
+    <form action="/edit/{{schema}}/delete" class="delete-form">
+        <button type="submit" class="delete-button">Delete</button>
+    </form>
+    <form action="/edit/{{schema}}/update" class="update-form">
+        <button type="submit" class="update-button">Update</button>
+    </form>
+</div>
+
     <div class="table-container">
         <table>
             <thead>
@@ -47,7 +60,11 @@
                     {% for column in columns %}
                     <th>
                         {% if column not in ['hdicode', 'region'] %}
+                            {% if country == None %}
                             <a href="/list/{{ schema }}/{{ column }}/{{ 'asc' if sorted_column != column or sorted_order == 'desc' else 'desc' }}" class="header-link">
+                            {% else %}
+                            <a href="/list/{{ schema }}/search/{{ country }}/{{ column }}/{{ 'asc' if sorted_column != column or sorted_order == 'desc' else 'desc' }}" class="header-link">
+                            {% endif %}
                                 <span class="header-title">
                                     {{ column }}
                                     {% if sorted_column == column %}
