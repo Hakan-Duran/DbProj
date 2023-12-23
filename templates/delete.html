@@ -10,7 +10,7 @@
     Deleted records should have:
 
     {% if table == "co2_production" %}
-        <form action="/edit/co2_production/delete" method="post">
+        <form action="/edit/co2_production/delete" method="post" class="delete-f">
             <label for="column">Table:</label>
             <select id="column" name="column">
                 <option value="" selected disabled>Select an option</option>
@@ -54,9 +54,10 @@
             </select>
             <label for="txtvalue">is (is equal to)</label><br>
             <input type="text" id="txtvalue" name="txtvalue"><br>
+            <input type="submit" value="Submit">
         </form>
     {% elif table == "gross_national_income_per_capital" %}
-        <form action="/edit/gross_national_income_per_capital/delete" method="post">
+        <form action="/edit/gross_national_income_per_capital/delete" method="post" class="delete-f">
             <label for="column">Table:</label>
             <select id="column" name="column">
                 <option value="" selected disabled>Select an option</option>
@@ -100,9 +101,10 @@
             </select>
             <label for="txtvalue">is (is equal to)</label><br>
             <input type="text" id="txtvalue" name="txtvalue"><br>
+            <input type="submit" value="Submit">
         </form>
     {% elif table == "human_development_index" %}
-        <form action="/edit/human_development_index/delete" method="post">
+        <form action="/edit/human_development_index/delete" method="post" class="delete-f">
             <label for="column">Table:</label>
             <select id="column" name="column">
                 <option value="" selected disabled>Select an option</option>
@@ -146,10 +148,11 @@
             </select>
             <label for="txtvalue">is (is equal to)</label><br>
             <input type="text" id="txtvalue" name="txtvalue"><br>
+            <input type="submit" value="Submit">
         </form>
 
     {% elif table == "life_expectancy_by_birth" %}
-        <form action="/edit/life_expectancy_by_birth/delete" method="post">
+        <form action="/edit/life_expectancy_by_birth/delete" method="post" class="delete-f">
             <label for="column">Table:</label>
             <select id="column" name="column">
                 <option value="" selected disabled>Select an option</option>
@@ -193,6 +196,7 @@
             </select>
             <label for="txtvalue">is (is equal to)</label><br>
             <input type="text" id="txtvalue" name="txtvalue"><br>
+            <input type="submit" value="Submit">
         </form>
 
     {% else %}

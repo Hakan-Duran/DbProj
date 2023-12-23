@@ -113,7 +113,7 @@ th {
 .insert-button {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #b1d910;
+    background-color: #e8dc01;
     color: white;
     border: none;
     border-radius: 5px;
@@ -122,13 +122,13 @@ th {
 }
 
 .insert-button:hover {
-    background-color: #e8dc01;
+    background-color: #596b13 ;
 }
 
 .delete-button {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #752323;
+    background-color: #e80101;
     color: white;
     border: none;
     border-radius: 5px;
@@ -137,13 +137,13 @@ th {
 }
 
 .delete-button:hover {
-    background-color: #e80101;
+    background-color: #752323 ;
 }
 
 .update-button {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #101dd9;
+    background-color: #109eea;
     color: white;
     border: none;
     border-radius: 5px;
@@ -152,7 +152,7 @@ th {
 }
 
 .update-button:hover {
-    background-color: #109eea;
+    background-color: #10188d ;
 }
 
 .insert-button, .delete-button, .update-button {
@@ -236,4 +236,16 @@ th {
     .team-section, .table-section {
         margin-bottom: 20px;
     }
+}
+
+.delete-f {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.delete-f label,
+.delete-f select,
+.delete-f input {
+    margin-right: 10px;
 }

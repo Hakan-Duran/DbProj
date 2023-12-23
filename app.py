@@ -23,29 +23,6 @@ conn = mysql.connector.connect(**db_config)
 # Create a cursor object to interact with the database
 cursor = conn.cursor()
 
-def execute_sql_file(file_path, db_config):
-    try:
-        conn = mysql.connector.connect(**db_config)
-        cursor = conn.cursor()
-
-        # Read SQL queries from the file
-        with open(file_path, 'r') as sql_file:
-            queries = sql_file.read()
-
-
-        cursor.execute(queries, multi=True)
-        conn.commit()
-
-        print(f"SQL file {file_path} executed successfully.")
-
-    except mysql.connector.Error as err:
-        print(f"MySQL Error: {err}")
-
-    finally:
-        if conn.is_connected():
-            cursor.close()
-            conn.close()
-
 def get_data_from_database(table, date):
     if table == "co2_production":
         # Fetch necessary data for map creation
@@ -213,7 +190,7 @@ def search(schema=None, column=None, order=None, country=None):
 @app.route('/list')
 @app.route('/list/<schema>')
 @app.route('/list/<schema>/<column>/<order>')
-def list(schema=None, column=None, order=None):
+def list(schema=None, column=None, order=None, country=None):
     
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor()
@@ -239,11 +216,10 @@ def list(schema=None, column=None, order=None):
     cursor.close()
     conn.close()
 
-    return render_template('list.html', schema=schema , columns=columns, results=results , sorted_column=column, sorted_order=order, next_order=next_order)
+    return render_template('list.html', schema=schema , columns=columns, results=results , sorted_column=column, sorted_order=order, next_order=next_order, country=country)
 
 @app.route('/')
 def home():
-    # execute_sql_file('queries.sql', db_config)
     return render_template('home.html')
 
 if __name__ == '__main__':
