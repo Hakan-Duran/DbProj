@@ -59,22 +59,18 @@
                 <tr>
                     {% for column in columns %}
                     <th>
-                        {% if column not in ['hdicode', 'region'] %}
-                            {% if country == None %}
-                            <a href="/list/{{ schema }}/{{ column }}/{{ 'asc' if sorted_column != column or sorted_order == 'desc' else 'desc' }}" class="header-link">
-                            {% else %}
-                            <a href="/list/{{ schema }}/search/{{ country }}/{{ column }}/{{ 'asc' if sorted_column != column or sorted_order == 'desc' else 'desc' }}" class="header-link">
-                            {% endif %}
-                                <span class="header-title">
-                                    {{ column }}
-                                    {% if sorted_column == column %}
-                                        <span class="{{ 'ascending' if sorted_order == 'asc' else 'descending' }}"></span>
-                                    {% endif %}
-                                </span>
-                            </a>
+                        {% if country == None %}
+                        <a href="/list/{{ schema }}/{{ column }}/{{ 'asc' if sorted_column != column or sorted_order == 'desc' else 'desc' }}" class="header-link">
                         {% else %}
-                            <span class="header-title">{{ column }}</span>
+                        <a href="/list/{{ schema }}/search/{{ country }}/{{ column }}/{{ 'asc' if sorted_column != column or sorted_order == 'desc' else 'desc' }}" class="header-link">
                         {% endif %}
+                            <span class="header-title">
+                                {{ column }}
+                                {% if sorted_column == column %}
+                                    <span class="{{ 'ascending' if sorted_order == 'asc' else 'descending' }}"></span>
+                                {% endif %}
+                            </span>
+                        </a>
                     </th>
                     {% endfor %}
                 </tr>
